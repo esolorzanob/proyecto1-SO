@@ -1,0 +1,19 @@
+.table-container{
+	width: 80%;
+	height: 80%;
+	background-color: lightgrey;
+	margin-left: 200px;
+	margin-right: 200px;
+	margin-top: 50px;
+}
+
+.libre{
+	background-color: green;
+}
+.ocupado{
+	background-color: red;
+}
+
+.opciones {
+	margin: 20px;
+}
