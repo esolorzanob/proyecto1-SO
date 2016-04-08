@@ -10,14 +10,20 @@ memoria.controller('mainController', function ($scope) {
 		$scope.rows = [];
 		var cells = $scope.memSize / $scope.pagSize;
 		var result = 0;
+        /*
 		for (var i = 0; i <= 12; i++) {
 			if (Math.pow(2, i) == cells) {
 				result = i;
 			}
 		}
+        */
+        /*
 		var numCols = Math.floor(result / 2);
 		numCols = Math.pow(2, numCols);
 		var numRows = cells / numCols;
+        */
+        var numRows = cells/8;
+        var numCols = cells/numRows;
 		var counter = 0;
 		for (var row = 1; row <= numRows; row++) {
 			var columns = [];
@@ -39,7 +45,7 @@ memoria.controller('mainController', function ($scope) {
 	} // fin de crear memoria
 	
 	$scope.agregarProceso = function () {
-		var proceso = {};
+        var proceso = {};
 		proceso.id = $scope.processID;
 		proceso.size = $scope.proceso.size;
 		proceso.tiempo = $scope.proceso.tiempo;
@@ -56,6 +62,7 @@ memoria.controller('mainController', function ($scope) {
 				for (var e = 0; e < $scope.rows.length; e++) {
 					for (var x = 0; x < $scope.rows[e].length; x++) {
 						var pagina = $scope.rows[e][x];
+                        
 						if (pagina.status == "libre") {
 							pagina.status = "ocupado";
 							pagina.proceso = element.id;

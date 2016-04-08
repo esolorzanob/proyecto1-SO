@@ -2,92 +2,113 @@
 <html ng-app="memoria">
 
 <head>
-	<title>Memoria</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<script src="js/angular.js"></script>
-	<script src="js/script.js"></script>
-	<script src="js/jquery.js"></script>
-	<script src="js/bootstrap.js"></script>
-	<link rel="stylesheet" href="css/bootstrap.css" />
-	<link rel="stylesheet" href="css/proyecto.css" />
+    <title>Memoria</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script src="js/angular.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.css" />
+    <link rel="stylesheet" href="css/proyecto.css" />
 </head>
 
 <body ng-controller="mainController">
-	<div class="opciones">
-		<form class="form-horizontal" name="form" ng-submit="createMemory()">
-			<div class="form-group">
-				<div class="col-md-2">
-					<label>Escoja el tamaño de la memoria</label>
-				</div>
-				<div class="col-md-1">
-					<select class="form-control" name="memSize" ng-model="memSize" required>
-						<option value="512">512kb</option>
-						<option value="1024">1024kb</option>
-						<option value="2048">2048kb</option>
-						<option value="4096">4096kb</option>
-					</select>
-				</div>
-				<div class="col-md-2">
-					<label>Escoja el tamaño del proceso</label>
-				</div>
-				<div class="col-md-1">
-					<select class="form-control" name="size" ng-model="proceso.size">
-						<option value="64">64kb</option>
-						<option value="128">128kb</option>
-						<option value="256">256kb</option>
-						<option value="512">512kb</option>
-					</select>
-				</div>
-				<div class="col-md-2">
-					<div class="btn btn-primary" ng-click="correrMemoria()">Agregar programa</div>
-				</div>
-			</div>
-			<div class="form-group">
-				<div class="col-md-2">
-					<label>Escoja el tamaño de la pagina</label>
-				</div>
-				<div class="col-md-1">
-					<select class="form-control" name="pagSize" ng-model="pagSize" required>
-						<option value="8">8kb</option>
-						<option value="16">16kb</option>
-						<option value="32">32kb</option>
-						<option value="64">64kb</option>
-					</select>
-				</div>
-				<div class="col-md-2">
-					<label>Escoja la duracion del programa</label>
-				</div>
-				<div class="col-md-1">
-					<select class="form-control" name="tiempo" ng-model="proceso.tiempo" required>
-						<option value="1000">1 segundo</option>
-						<option value="2000">2 segundos</option>
-						<option value="3000">3 segundos</option>
-						<option value="4000">4 segundos</option>
-					</select>
-				</div>
-				<div class="col-md-2">
-					<div class="btn btn-primary" ng-click="agregarProceso()">Agregar proceso</div>
-				</div>
-			</div>
-			<div class="form-group">
-				<div class="col-md-2">
-					<input type="submit" id="submit" name="submit" value="Crear Memoria" class="btn btn-primary" ng-disabled="form.pagSize.$error.required || form.memSize.$error.required">
-				</div>
-			</div>
-		</form>
-	</div>
-
-	<div class="table-container">
-		<table class="table table-bordered">
-			<tbody>
-				<tr ng-repeat="row in rows">
-					<td ng-repeat="column in row" class="{{column.status}}" id="{{column.numPagina}}">
-						{{column.numPagina}}
-					</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
+    <div class="opciones">
+        <form class="form-horizontal" name="form" ng-submit="createMemory()">
+            <div class="form-group">
+                <div class="col-md-2">
+                    <label>Escoja el tamaño de la memoria</label>
+                </div>
+                <div class="col-md-2">
+                    <select class="form-control" name="memSize" ng-model="memSize" required>
+                        <option value="512">512kb</option>
+                        <option value="1024">1024kb</option>
+                        <option value="2048">2048kb</option>
+                        <option value="4096">4096kb</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label>Escoja el tamaño del proceso</label>
+                </div>
+                <div class="col-md-2">
+                    <select class="form-control" name="size" ng-model="proceso.size">
+                        <option value="64">64kb</option>
+                        <option value="128">128kb</option>
+                        <option value="256">256kb</option>
+                        <option value="512">512kb</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <div class="btn btn-primary" ng-click="correrMemoria()">Agregar programa</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-2">
+                    <label>Escoja el tamaño de la pagina</label>
+                </div>
+                <div class="col-md-2">
+                    <select class="form-control" name="pagSize" ng-model="pagSize" required>
+                        <option value="8">8kb</option>
+                        <option value="16">16kb</option>
+                        <option value="32">32kb</option>
+                        <option value="64">64kb</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label>Escoja la duracion del programa</label>
+                </div>
+                <div class="col-md-2">
+                    <select class="form-control" name="tiempo" ng-model="proceso.tiempo" required>
+                        <option value="1000">1 segundo</option>
+                        <option value="2000">2 segundos</option>
+                        <option value="3000">3 segundos</option>
+                        <option value="4000">4 segundos</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <div class="btn btn-primary" ng-click="agregarProceso()">Agregar proceso</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-2">
+                    <input type="submit" id="submit" name="submit" value="Crear Memoria" class="btn btn-primary" ng-disabled="form.pagSize.$error.required || form.memSize.$error.required">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="table-container">
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr ng-repeat="row in rows">
+                            <td ng-repeat="column in row" class="{{column.status}}" id="{{column.numPagina}}">
+                                {{column.numPagina}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="table-container">
+            <table class="table table-bordered table-striped table-hover">
+                <thead>
+                    <th>ID</th>
+                    <th>Size</th>
+                    <th>CPU time</th>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="proceso in procesos">
+                        <td>{{proceso.id}}</td>
+                        <td>{{proceso.size}}</td>
+                        <td>{{proceso.tiempo}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>

@@ -1,12 +1,11 @@
 .table-container{
-	width: 80%;
-	height: 80%;
-	background-color: lightgrey;
-	margin-left: 200px;
-	margin-right: 200px;
-	margin-top: 50px;
+    
+	width: 90%;
+	margin-left: 20px;
+    margin-right: 20px;
+	
+	
 }
-
 .libre{
 	background-color: green;
 }
