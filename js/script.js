@@ -5,42 +5,40 @@ var memoria = angular.module('memoria', []);
 memoria.controller('mainController', function ($scope) {
 	$scope.processID = 0;
 	$scope.procesos = [];
-
+	$scope.ciclos = 0;
 	$scope.createMemory = function () {
 		$scope.rows = [];
-		var cells = $scope.memSize / $scope.pagSize;
-		var result = 0;
-        /*
-		for (var i = 0; i <= 12; i++) {
-			if (Math.pow(2, i) == cells) {
-				result = i;
-			}
-		}
-        */
-        /*
-		var numCols = Math.floor(result / 2);
-		numCols = Math.pow(2, numCols);
-		var numRows = cells / numCols;
-        */
-        var numRows = cells/8;
-        var numCols = cells/numRows;
+		$scope.cells = Math.floor($scope.memSize / $scope.pagSize);
+		$scope.lostMemory = $scope.memSize % $scope.pagSize;
+		$scope.paginas = [];
+        var numRows = $scope.cells / 8;
+        var numCols = $scope.cells / numRows;
 		var counter = 0;
-		for (var row = 1; row <= numRows; row++) {
+		var paginas = 0;
+		for (var row = 0; row <= numRows; row++) {
 			var columns = [];
 
-			for (var col = 1; col <= numCols; col++) {
+			for (var col = 0; col < 8; col++) {
 				var pagina = {
 					status: "libre",
-					ubicacion: col + "," + row,
+					numPagina: col + counter,
+					ubicacion: $scope.pagSize * (col + counter),
 					proceso: {},
 					tamaño: $scope.pagSize,
-					memlibre: 0,
-					numPagina: col + counter
+					memlibre: $scope.pagSize
+
 				}
+				paginas++;
 				columns.push(pagina);
+				$scope.paginas.push(pagina);
+				if (paginas >= $scope.cells) {
+
+					break;
+				}
 			}
-			counter += numCols;
+			counter += 8;
 			$scope.rows.push(columns);
+
 		}
 	} // fin de crear memoria
 	
@@ -49,38 +47,60 @@ memoria.controller('mainController', function ($scope) {
 		proceso.id = $scope.processID;
 		proceso.size = $scope.proceso.size;
 		proceso.tiempo = $scope.proceso.tiempo;
+		proceso.entrante = $scope.proceso.entrante;
+		proceso.estado = "Esperando";
 		$scope.processID++;
 		$scope.procesos.push(proceso);
 	}
 
 	$scope.correrMemoria = function () {
-		
+
 		$scope.procesos.forEach(function (element) {
 			var numPaginas = element.size / $scope.pagSize;
-			for (var i = 1; i <= numPaginas; i++) {
+			var memSobrante = element.size % $scope.pagSize;
+			for (var i = 0; i < numPaginas - 1; i++) {
 				var listo = false;
-				for (var e = 0; e < $scope.rows.length; e++) {
-					for (var x = 0; x < $scope.rows[e].length; x++) {
-						var pagina = $scope.rows[e][x];
-                        
-						if (pagina.status == "libre") {
-							pagina.status = "ocupado";
-							pagina.proceso = element.id;
-							$('#' + pagina.numPagina).removeClass("libre").addClass("ocupado");
-							$('#' + pagina.numPagina).text("PID=" + pagina.proceso);
-							listo = true;
-							break;
-						}
-					}
-					if (listo) {
+				for (var e = 0; e < $scope.paginas.length; e++) {
+					var pagina = $scope.paginas[e];
+					if (pagina.status == "libre" && element.entrante == $scope.ciclos) {
+						pagina.status = "ocupado";
+						pagina.proceso = element.id;
+						pagina.memlibre = 0;
+						$('#' + pagina.numPagina).removeClass("libre").addClass("ocupado");
+						$('#' + pagina.numPagina).text("PID=" + pagina.proceso);
+						element.estado = "En memoria";
 						break;
 					}
+
 				}
 			} // fin de for por pagina
-			
+			if (memSobrante != 0 && element.entrante == $scope.ciclos) {
+				var nextId = parseInt($('.ocupado').last().attr('id'), 10);
+				nextId += 1;
+				var $paginaObj = $('#' + nextId);
+				var pagina = $scope.paginas[$paginaObj.attr('id')];
+				pagina.status = "fraccionada";
+				pagina.proceso = element.id;
+				pagina.memlibre = 17 - memSobrante;
+				$paginaObj.removeClass("libre").addClass("fraccionada");
+				$paginaObj.text("PID=" + pagina.proceso);
+			}
+			if ($scope.ciclos == parseInt(element.tiempo)+parseInt(element.entrante)) {
+				$('td:contains(PID=' + element.id + ')').each(function (i) {
+					var pagina = $scope.paginas[element.id + i];
+					pagina.status = "libre",
+					pagina.proceso = {};
+					pagina.memlibre = 17;
+					$(this).removeClass('ocupado').addClass('libre');
+					$(this).removeClass('fraccionada').addClass('libre');
+					$(this).text($(this).attr('id'));
+					element.estado = "Finalizado";
+				});
+			}
+
 		}, this);
-		
-		
-	}// fin agregar programa
+
+		$scope.ciclos++;
+	}// fin correr memoria
 
 });
