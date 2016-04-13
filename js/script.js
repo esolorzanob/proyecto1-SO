@@ -1,12 +1,11 @@
 
 var memoria = angular.module('memoria', []);
-
-
 memoria.controller('mainController', function ($scope) {
 	$scope.processID = 0;
 	$scope.procesos = [];
 	$scope.ciclos = 0;
 	$scope.perdida = 0;
+	
 	$scope.createMemory = function () {
 		$scope.rows = [];
 		$scope.cells = Math.floor($scope.memSize / $scope.pagSize);
@@ -27,13 +26,11 @@ memoria.controller('mainController', function ($scope) {
 					proceso: {},
 					tamaño: $scope.pagSize,
 					memlibre: $scope.pagSize
-
 				}
 				paginas++;
 				columns.push(pagina);
 				$scope.paginas.push(pagina);
 				if (paginas >= $scope.cells) {
-
 					break;
 				}
 			}
@@ -64,15 +61,14 @@ memoria.controller('mainController', function ($scope) {
 					var pagina = $scope.paginas[$(obj).attr('id')];
 					pagina.status = "libre",
 					pagina.proceso = {};
-					pagina.memlibre = 17;
+					pagina.memlibre = $scope.pagSize;
 					$(this).removeClass('ocupado').addClass('libre');
 					$(this).removeClass('fraccionada').addClass('libre');
 					$(this).text($(this).attr('id'));
 					element.estado = "Finalizado";
 				});
 			}
-			for (var i = 0; i < numPaginas - 1; i++) {
-				var listo = false;
+			for (var i = 0; i < numPaginas - 1; i++) {				
 				for (var e = 0; e < $scope.paginas.length; e++) {
 					var pagina = $scope.paginas[e];
 					if (pagina.status == "libre" && element.entrante == $scope.ciclos) {
@@ -84,9 +80,9 @@ memoria.controller('mainController', function ($scope) {
 						element.estado = "En memoria";
 						break;
 					}
-
 				}
 			} // fin de for por pagina
+			
 			if (memSobrante != 0 && element.entrante == $scope.ciclos) {
 				var nextId = parseInt($('.libre').first().attr('id'), 10);
 				var $paginaObj = $('#' + nextId);
@@ -115,13 +111,13 @@ memoria.controller('mainController', function ($scope) {
 		} else {
 			$scope.perdida = 0;
 		}
-
 		$scope.ciclos++;
 	}// fin correr memoria
 
 	$scope.automatico = function () {
 		setInterval(function () { $scope.correrMemoria() }, 2000);
 	}
+	
 	$scope.detener = function () {
 		clearInterval($scope.automatico);
 		$scope.ciclos = 0;
