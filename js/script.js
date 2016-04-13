@@ -6,6 +6,7 @@ memoria.controller('mainController', function ($scope) {
 	$scope.processID = 0;
 	$scope.procesos = [];
 	$scope.ciclos = 0;
+	$scope.perdida = 0;
 	$scope.createMemory = function () {
 		$scope.rows = [];
 		$scope.cells = Math.floor($scope.memSize / $scope.pagSize);
@@ -58,6 +59,18 @@ memoria.controller('mainController', function ($scope) {
 		$scope.procesos.forEach(function (element) {
 			var numPaginas = element.size / $scope.pagSize;
 			var memSobrante = element.size % $scope.pagSize;
+			if ($scope.ciclos == parseInt(element.tiempo) + parseInt(element.entrante)) {
+				$('td:contains(PID=' + element.id + ')').each(function (i, obj) {
+					var pagina = $scope.paginas[$(obj).attr('id')];
+					pagina.status = "libre",
+					pagina.proceso = {};
+					pagina.memlibre = 17;
+					$(this).removeClass('ocupado').addClass('libre');
+					$(this).removeClass('fraccionada').addClass('libre');
+					$(this).text($(this).attr('id'));
+					element.estado = "Finalizado";
+				});
+			}
 			for (var i = 0; i < numPaginas - 1; i++) {
 				var listo = false;
 				for (var e = 0; e < $scope.paginas.length; e++) {
@@ -75,32 +88,42 @@ memoria.controller('mainController', function ($scope) {
 				}
 			} // fin de for por pagina
 			if (memSobrante != 0 && element.entrante == $scope.ciclos) {
-				var nextId = parseInt($('.ocupado').last().attr('id'), 10);
-				nextId += 1;
+				var nextId = parseInt($('.libre').first().attr('id'), 10);
 				var $paginaObj = $('#' + nextId);
+				var clase = $paginaObj.attr('class');
+				if (clase == "ocupado" || clase == "fraccionada") {
+					nextId++;
+					$paginaObj = $('#' + nextId);
+				}
 				var pagina = $scope.paginas[$paginaObj.attr('id')];
 				pagina.status = "fraccionada";
 				pagina.proceso = element.id;
-				pagina.memlibre = 17 - memSobrante;
+				pagina.memlibre = $scope.pagSize - memSobrante;
 				$paginaObj.removeClass("libre").addClass("fraccionada");
 				$paginaObj.text("PID=" + pagina.proceso);
 			}
-			if ($scope.ciclos == parseInt(element.tiempo)+parseInt(element.entrante)) {
-				$('td:contains(PID=' + element.id + ')').each(function (i) {
-					var pagina = $scope.paginas[element.id + i];
-					pagina.status = "libre",
-					pagina.proceso = {};
-					pagina.memlibre = 17;
-					$(this).removeClass('ocupado').addClass('libre');
-					$(this).removeClass('fraccionada').addClass('libre');
-					$(this).text($(this).attr('id'));
-					element.estado = "Finalizado";
-				});
-			}
+
 
 		}, this);
+		var fraccionadaCheck = $('.fraccionada').length;
+		if (fraccionadaCheck > 0) {
+			$scope.perdida = 0;
+			$('.fraccionada').each(function (i, obj) {
+				var pagina = $scope.paginas[$(obj).attr('id')];
+				$scope.perdida += pagina.memlibre;
+			});
+		} else {
+			$scope.perdida = 0;
+		}
 
 		$scope.ciclos++;
 	}// fin correr memoria
 
+	$scope.automatico = function () {
+		setInterval(function () { $scope.correrMemoria() }, 2000);
+	}
+	$scope.detener = function () {
+		clearInterval($scope.automatico);
+		$scope.ciclos = 0;
+	}
 });

@@ -24,7 +24,7 @@
                       
                 </div>
                 <div class="col-md-2">
-                    <label>Escriba el tamaño del proceso en Kbs</label>
+                    <label>Escriba el tamaño del proceso en Kb</label>
                 </div>
                 <div class="col-md-2">
                     <input type="text" class="form-control" name="size" ng-model="proceso.size">
@@ -32,15 +32,19 @@
                 </div>
                 <div class="col-md-2">
                    
-                     <div class="btn btn-primary" ng-click="agregarProceso()">Agregar proceso a lista</div>
+                     <div class="btn btn-primary" ng-click="agregarProceso()" ng-disabled="!proceso.size || !proceso.tiempo || !proceso.entrante">Agregar proceso a lista</div>
+                </div>
+                 <div class="col-md-2">
+                    <label>Ciclo actual: {{ciclos}}</label>
+                     
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-md-2">
-                    <label>Escriba el tamaño de la pagina KBs</label>
+                    <label>Escriba el tamaño de la pagina en Kb</label>
                 </div>
                 <div class="col-md-2">
-                    <input type="text" class="form-control" name="pagSize" ng-model="pagSize" >
+                    <input type="text" class="form-control" name="pagSize" ng-model="pagSize" required >
                       
                 </div>
                 <div class="col-md-2">
@@ -51,23 +55,32 @@
                        
                 </div>
                 <div class="col-md-2">
-                    <div class="btn btn-primary" ng-click="correrMemoria()">Correr</div>
+                    <div class="btn btn-primary" ng-click="correrMemoria()" ng-disabled="procesos.length == 0">Correr un ciclo</div>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-md-2">
-                    <input type="submit" id="submit" name="submit" value="Crear Memoria" class="btn btn-primary" ng-disabled="form.pagSize.$error.required || form.memSize.$error.required">
+                    <input type="submit" id="submit" name="submit" value="Crear Memoria" class="btn btn-primary" ng-disabled="!pagSize || !memSize">
                 </div>
                   <div class="col-md-2">
-                   <p>Memoria total: {{memSize}} Kbs</p>
-                   <p>Tamaño de pagina: {{pagSize}} Kbs</p>
-                   <p>Memoria no paginada: {{lostMemory}} Kbs</p>
+                   <p>Memoria total: {{memSize}} Kb</p>
+                   <p>Tamaño de pagina: {{pagSize}} Kb</p>
+                   <p>Memoria no paginada: {{lostMemory}} Kb</p>
+                   <p>Memoria perdida por fragmentación: {{perdida}} Kb</p>
                 </div>
                  <div class="col-md-2">
                     <label>Escriba el ciclo entrante</label>
                 </div>
                 <div class="col-md-2">
                     <input type="text" class="form-control" name="tiempo" ng-model="proceso.entrante" >
+                       
+                </div>
+                 <div class="col-md-2">
+                    <div class="btn btn-primary" ng-click="automatico()" ng-disabled="procesos.length == 0">Proceso Automatico</div>
+                       
+                </div>
+                 <div class="col-md-2">
+                    <div class="btn btn-warning" ng-click="detener()">Detener</div>
                        
                 </div>
             </div>
@@ -100,7 +113,7 @@
                 <tbody>
                     <tr ng-repeat="proceso in procesos">
                         <td>{{proceso.id}}</td>
-                        <td>{{proceso.size}} Kbs</td>
+                        <td>{{proceso.size}} Kb</td>
                         <td>{{proceso.tiempo}}</td>
                         <td>{{proceso.entrante}}</td>
                         <td>{{proceso.estado}}</td>
