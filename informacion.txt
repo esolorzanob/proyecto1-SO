@@ -1,0 +1,21 @@
+El programa fue hecho en Web, usando HTML 5, CSS 3, Bootstrap, AngularJS y jQuery. La escogencia de estas tecnologías se basó en la habilidad de Angular para cambiar dinámicamente el contenido de la página web y también
+por la forma sencilla de manejar objetos en arreglos y crear tablas dinámicamente a través de los contenidos de estos arreglos. 
+
+El mayor problema que tiene este lenguaje a la hora de crear un proyecto como este, es la falta de programación por hilos. En este caso, como la página web está sujeta a un buscador, que es un software con
+sus propias reglas, no tiene implementado el uso de hilos como tal. Hay que usar una función llamada setInterval, la cual llama una función previamente creada de forma asincrónica. El setInterval llama a la
+función deseada una vez cada cierto tiempo, cuyo valor es recibido por el mismo setInterval. El problema es que mientras el setInterval está funcionando, los elementos del HTML no se refrescan automáticamente,
+lo cual hace parecer que la pagina no está trabajando. Variables como el número de ciclo por el que va el proceso, no se refresca del todo, así como el status del programa. Este problema no fue solucionado,
+lamentablemente.
+
+Aparte de ese problema, la escogencia de las tecnologías simplificó mucho el trabajo. La cantidad de código escrito se mantuvo al mínimo, siendo éste muy eficiente. La parte visual se vuelve muy agradable 
+para el usuario ya que Bootstrap provee estructuras para acomodar los elementos dentro del HTML de forma fácil. Los colores de las celdas de memoria y los cambios son hechos a través de CSS lo cual hace que
+todo se vuelva más intuitivo a la hora de programar. 
+
+El programa cuanta en la parte superior con varios campos de texto. El usuario debe escribir lo que se le pide para poder crear la memoria y los procesos para empezar a correr el programa. Los botones en
+un principio estan deshabilitados para evitar que se creen objectos vacíos y que el programa se caiga. Bueno en este caso, ese es otra ventaja de usar Web, el programa no se cae, simplemente devuelve un 
+error en la consola, pero la pagina queda activa y se puede simplemente volver a introducir los valores y seguir con su ejecución. 
+
+A esta aplicación web le falta implementar validadores para que el usuario no ingrese valores no numéricos. La aplicación esta programada para mostrar en todo momento la cantidad de memoria total, la memoria 
+usada y la memoria perdida por fragmentación interna. Bueno en todo momento, excepto cuando el programa esta en modo automático, ya que por el problema explicado anteriormente, el contenido no refresca 
+automáticamente, sino hasta que el programa ha finalizado.  
+
